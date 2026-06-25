@@ -1,0 +1,2 @@
+# gcm
+## Generate Commit Message
