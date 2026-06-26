@@ -18,8 +18,8 @@ export const API_KEY_URLS: Partial<Record<Provider, string>> = {
 };
 
 export const PROVIDERS: { label: string; value: Provider; free: boolean }[] = [
-  { label: 'Gemini', value: 'gemini', free: true },
   { label: 'Groq', value: 'groq', free: true },
+  { label: 'Gemini', value: 'gemini', free: false },
   { label: 'Ollama (local, no key needed)', value: 'ollama', free: true },
   { label: 'OpenAI', value: 'openai', free: false },
   { label: 'Anthropic', value: 'anthropic', free: false },
