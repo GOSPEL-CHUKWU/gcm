@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
+    "@clack/prompts": "^1.6.0",
     "@google/generative-ai": "^0.24.0",
     "chalk": "^5.4.1",
     "groq-sdk": "^0.13.0",
