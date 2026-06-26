@@ -3,8 +3,6 @@ import path from 'path';
 import fs from 'fs';
 import type { GitContext } from '../types/types.git.js';
 
-export type { GitContext };
-
 // Runs a shell command and returns the output as a string.
 // Returns empty string if the command fails instead of crashing.
 function run(command: string): string {

@@ -39,9 +39,9 @@ function openInEditor(message: string): string {
 
 // Commits with the given message
 function commit(message: string): void {
-  execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`, {
-    stdio: 'inherit',
-  });
+  const parts = message.split('\n\n');
+  const mFlags = parts.map(p => `-m "${p.replace(/"/g, '\\"')}"`).join(' ');
+  execSync(`git commit ${mFlags}`, { stdio: 'inherit' });
 }
 
 // The main y/e/n prompt loop
