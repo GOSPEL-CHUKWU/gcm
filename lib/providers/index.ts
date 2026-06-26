@@ -7,15 +7,21 @@ import * as ollama from './ollama.js';
 
 const providers = { gemini, openai, anthropic, groq, ollama };
 
-// Errors from each provider are intentionally not caught here.
-// They bubble up to init.ts which handles them with the right message.
+// Errors bubble up to the caller — not caught here
 export async function validateKey(
   provider: Provider,
   apiKey?: string,
 ): Promise<boolean> {
-  if (provider === 'ollama') {
-    return ollama.validateKey();
-  }
+  if (provider === 'ollama') return ollama.validateKey();
   if (!apiKey) return false;
   return providers[provider].validateKey(apiKey);
+}
+
+export async function generate(
+  provider: Provider,
+  prompt: string,
+  apiKey: string,
+  model: string,
+): Promise<string> {
+  return providers[provider].generate(prompt, apiKey, model);
 }

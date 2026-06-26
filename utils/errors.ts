@@ -6,7 +6,7 @@ export function handleError(err: any): never {
   if (err?.status >= 500) throw new Error('server_error');
   if (
     ['ECONNREFUSED', 'ENOTFOUND', 'ETIMEDOUT', 'Connection error.'].includes(
-      err?.code || err?.message,
+      err || err?.code || err?.message,
     )
   )
     throw new Error('network_error');

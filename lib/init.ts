@@ -24,12 +24,7 @@ export async function runInit(): Promise<void> {
     options: PROVIDERS.map(prov => ({
       value: prov.value,
       label: prov.label,
-      hint:
-        prov.value === 'ollama'
-          ? 'local, no key needed'
-          : prov.free
-            ? 'free'
-            : 'paid',
+      hint: prov.free ? 'free' : 'paid',
     })),
   });
 

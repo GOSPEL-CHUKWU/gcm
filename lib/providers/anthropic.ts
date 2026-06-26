@@ -10,3 +10,18 @@ export async function validateKey(apiKey: string): Promise<boolean> {
     handleError(err);
   }
 }
+
+export async function generate(
+  prompt: string,
+  apiKey: string,
+  model: string,
+): Promise<string> {
+  const client = new Anthropic({ apiKey });
+  const response = await client.messages.create({
+    model,
+    max_tokens: 1024,
+    messages: [{ role: 'user', content: prompt }],
+  });
+  const block = response.content[0];
+  return block.type === 'text' ? block.text.trim() : '';
+}

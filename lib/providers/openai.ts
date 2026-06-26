@@ -10,3 +10,17 @@ export async function validateKey(apiKey: string): Promise<boolean> {
     handleError(err);
   }
 }
+
+export async function generate(
+  prompt: string,
+  apiKey: string,
+  model: string,
+): Promise<string> {
+  const client = new OpenAI({ apiKey });
+  const response = await client.chat.completions.create({
+    model,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.3,
+  });
+  return response.choices[0]?.message?.content?.trim() ?? '';
+}
