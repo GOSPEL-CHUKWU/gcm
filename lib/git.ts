@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import type { GitContext } from '../types/types.git.js';
 
+export type { GitContext };
 
 // Runs a shell command and returns the output as a string.
 // Returns empty string if the command fails instead of crashing.
@@ -22,7 +23,8 @@ function isGitRepo(): boolean {
 }
 
 function hasStagedChanges(): boolean {
-  return run('git diff --staged --quiet --exit-code; echo $?') === '1';
+  const diff = run('git diff --staged --name-only');
+  return diff.length > 0;
 }
 
 // The actual diff — what the AI reads to understand what changed
