@@ -29,7 +29,7 @@ export function showHelp(): void {
       chalk.dim('  delete config and start over'),
   );
   console.log(
-    '  ' + chalk.cyan('gcm --version (-v)') + chalk.dim('     show version'),
+    '  ' + chalk.cyan('gcm --version (-v)') + chalk.dim('  show version'),
   );
   console.log();
   console.log(chalk.bold('WORKFLOW'));
