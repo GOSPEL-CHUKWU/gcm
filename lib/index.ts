@@ -72,6 +72,8 @@ while (generating) {
       config.apiKey ?? '',
       config.model,
     );
+    console.log('RAW MESSAGE:', JSON.stringify(message));
+
     spinner.stop('Done.');
   } catch (err: any) {
     spinner.stop(chalk.red('Failed to generate message.'));
