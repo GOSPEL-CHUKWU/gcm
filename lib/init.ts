@@ -99,11 +99,10 @@ export async function runInit(): Promise<void> {
     ...(apiKey && { apiKey }),
   };
 
-  await new Promise(resolve => setTimeout(resolve, 100));
-
   saveConfig(config);
 
   p.outro(chalk.green('✔') + ' Config saved to ~/.gcm/config.json');
-  process.stdin.destroy();
-  process.exit(0);
+
+  // Small delay to allow clack/terminal cleanup on Windows before exit
+  await new Promise(resolve => setTimeout(resolve, 200));
 }
