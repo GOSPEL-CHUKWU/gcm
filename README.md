@@ -64,7 +64,7 @@ gcm                  # generate a commit message from staged changes
 gcm init             # re-run setup (switch provider or update API key)
 gcm config           # view your current config
 gcm config --reset   # delete config and start over
-gcm --help           # show help
+gcm --help (or -h)   # show help
 ```
 
 ## Supported Providers
