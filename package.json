@@ -1,5 +1,5 @@
 {
-  "name": "gcm_ai",
+  "name": "gcm-agent",
   "version": "1.0.0",
   "description": "AI-powered git commit message generator for the terminal",
   "type": "module",

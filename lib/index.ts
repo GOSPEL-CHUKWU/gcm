@@ -8,12 +8,20 @@ import { buildPrompt } from './prompt.js';
 import { generate } from './providers/index.js';
 import { displayMessage, promptAction } from './ui.js';
 import { showHelp } from './help.js';
+import { createRequire } from 'module';
 
 async function main() {
+  const require = createRequire(import.meta.url);
+  const { version } = require('../package.json');
   const command = process.argv[2];
 
   if (command === '--help' || command === '-h') {
     showHelp();
+    process.exit(0);
+  }
+
+  if (command === '--version' || command === '-v') {
+    console.log(`gcm-agent v${version}`);
     process.exit(0);
   }
 
@@ -109,7 +117,7 @@ async function main() {
         prompt,
         config.apiKey ?? '',
         config.model,
-    );
+      );
 
       spinner.stop('Done.');
     } catch (err: any) {

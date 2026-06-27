@@ -5,7 +5,7 @@ AI-powered git commit message generator. Reads your staged diff, understands you
 ## Install
 
 ```bash
-npm install -g gcm_ai
+npm install -g gcm-agent
 ```
 
 ## First Run
@@ -60,11 +60,12 @@ The AI reads your staged diff, understands what changed and why, and generates a
 ## Commands
 
 ```bash
-gcm                  # generate a commit message from staged changes
-gcm init             # re-run setup (switch provider or update API key)
-gcm config           # view your current config
-gcm config --reset   # delete config and start over
-gcm --help (or -h)   # show help
+gcm                       # generate a commit message from staged changes
+gcm init                  # re-run setup (switch provider or update API key)
+gcm config                # view your current config
+gcm config --reset        # delete config and start over
+gcm --help (or -h)        # show help
+gcm --version (or -v)     # show version
 ```
 
 ## Supported Providers

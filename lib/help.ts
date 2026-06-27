@@ -28,6 +28,9 @@ export function showHelp(): void {
       chalk.cyan('gcm config --reset') +
       chalk.dim('  delete config and start over'),
   );
+  console.log(
+    '  ' + chalk.cyan('gcm --version (-v)') + chalk.dim('     show version'),
+  );
   console.log();
   console.log(chalk.bold('WORKFLOW'));
   console.log(
