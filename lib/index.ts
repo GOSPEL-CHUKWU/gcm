@@ -8,11 +8,10 @@ import { buildPrompt } from './prompt.js';
 import { generate } from './providers/index.js';
 import { displayMessage, promptAction } from './ui.js';
 import { showHelp } from './help.js';
-import { createRequire } from 'module';
+import pkg from '../package.json' with { type: 'json' };
+const version = pkg.version;
 
 async function main() {
-  const require = createRequire(import.meta.url);
-  const { version } = require('../package.json');
   const command = process.argv[2];
 
   if (command === '--help' || command === '-h') {
