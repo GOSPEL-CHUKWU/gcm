@@ -16,11 +16,15 @@ export async function generate(
   apiKey: string,
   model: string,
 ): Promise<string> {
-  const client = new Groq({ apiKey });
-  const response = await client.chat.completions.create({
-    model,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.3, // lower = more focused, less creative
-  });
-  return response.choices[0]?.message?.content?.trim() ?? '';
+  try {
+    const client = new Groq({ apiKey });
+    const response = await client.chat.completions.create({
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+    });
+    return response.choices[0]?.message?.content?.trim() ?? '';
+  } catch (err: any) {
+    handleError(err);
+  }
 }

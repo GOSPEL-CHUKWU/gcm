@@ -16,12 +16,16 @@ export async function generate(
   apiKey: string,
   model: string,
 ): Promise<string> {
-  const client = new Anthropic({ apiKey });
-  const response = await client.messages.create({
-    model,
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const block = response.content[0];
-  return block.type === 'text' ? block.text.trim() : '';
+  try {
+    const client = new Anthropic({ apiKey });
+    const response = await client.messages.create({
+      model,
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    const block = response.content[0];
+    return block.type === 'text' ? block.text.trim() : '';
+  } catch (err: any) {
+    handleError(err);
+  }
 }

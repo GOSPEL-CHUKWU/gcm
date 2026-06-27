@@ -2,7 +2,7 @@
 import * as p from '@clack/prompts';
 import chalk from 'chalk';
 import { runInit } from './init.js';
-import { getConfig, configExists } from './config.js';
+import { getConfig, configExists, resetConfig } from './config.js';
 import { getGitContext } from './git.js';
 import { buildPrompt } from './prompt.js';
 import { generate } from './providers/index.js';
@@ -28,6 +28,19 @@ if (command === 'config') {
     console.log(chalk.red('No config found. Run "gcm init" to get started.'));
     process.exit(1);
   }
+
+  const subcommand = process.argv[3];
+
+  if (subcommand === '--reset') {
+    resetConfig();
+    console.log();
+    console.log(
+      chalk.green('✔') + ' Config reset. Run "gcm init" to set up again.',
+    );
+    console.log();
+    process.exit(0);
+  }
+
   const config = getConfig();
   console.log();
   console.log(chalk.bold('Current config:'));
@@ -96,12 +109,22 @@ while (generating) {
       config.apiKey ?? '',
       config.model,
     );
-    
+
     spinner.stop('Done.');
   } catch (err: any) {
-    spinner.stop(chalk.red('Failed to generate message.'));
-    console.log(chalk.dim(err?.message ?? 'Unknown error'));
+    const messages: Record<string, string> = {
+      invalid_key: 'Your API key was rejected. Run "gcm init" to update it.',
+      rate_limited: 'Rate limit hit. Wait a moment and try again.',
+      server_error: 'Provider servers are down. Try again later.',
+      network_error:
+        'No internet connection. Check your network and try again.',
+      invalid_request: 'Invalid request. Check your model name or config.',
+      unknown_error: 'Something went wrong. Try again.',
+    };
+    const msg = messages[err?.message] ?? messages.unknown_error;
+    spinner.stop(chalk.red('✘ ' + msg));
     console.log();
+    await new Promise(resolve => setTimeout(resolve, 150));
     process.exit(1);
   }
 

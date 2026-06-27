@@ -28,3 +28,9 @@ export function saveConfig(config: GcmConfig): void {
 
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2), 'utf-8');
 }
+
+export function resetConfig(): void {
+  if (fs.existsSync(CONFIG_PATH)) {
+    fs.unlinkSync(CONFIG_PATH);
+  }
+}

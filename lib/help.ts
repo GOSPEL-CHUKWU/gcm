@@ -8,20 +8,25 @@ export function showHelp(): void {
   console.log(
     '  ' +
       chalk.cyan('gcm') +
-      chalk.dim('              generate a commit message from staged changes'),
+      chalk.dim('                 generate a commit message from staged changes'),
   );
   console.log(
     '  ' +
       chalk.cyan('gcm init') +
-      chalk.dim('         set up your AI provider and API key'),
+      chalk.dim('            set up your AI provider and API key'),
   );
   console.log(
-    '  ' + chalk.cyan('gcm config') + chalk.dim('       show current config'),
+    '  ' + chalk.cyan('gcm config') + chalk.dim('          show current config'),
   );
   console.log(
     '  ' +
       chalk.cyan('gcm --help (-h)') +
-      chalk.dim('  show this help message'),
+      chalk.dim('     show this help message'),
+  );
+  console.log(
+    '  ' +
+      chalk.cyan('gcm config --reset') +
+      chalk.dim('  delete config and start over'),
   );
   console.log();
   console.log(chalk.bold('WORKFLOW'));

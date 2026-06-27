@@ -32,8 +32,22 @@ export async function generate(
   apiKey: string,
   model: string,
 ): Promise<string> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const genModel = genAI.getGenerativeModel({ model });
-  const result = await genModel.generateContent(prompt);
-  return result.response.text();
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const genModel = genAI.getGenerativeModel({ model });
+    const result = await genModel.generateContent(prompt);
+    return result.response.text();
+  } catch (err: any) {
+    if (
+      err?.status === 429 ||
+      err?.message?.includes('429') ||
+      err?.message?.toLowerCase().includes('quota')
+    ) {
+      throw new Error('rate_limited');
+    }
+    if (err?.status === 400 && err?.message?.includes('API_KEY_INVALID')) {
+      throw new Error('invalid_key');
+    }
+    handleError(err);
+  }
 }
