@@ -4,4 +4,5 @@ export interface GitContext {
   recentCommits: string;
   projectName: string;
   projectDescription: string;
+  diffTruncated: boolean;
 }

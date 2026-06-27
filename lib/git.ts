@@ -2,6 +2,13 @@ import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import type { GitContext } from '../types/types.git.js';
+import type { Provider } from '../types/types.config.js';
+import { MAX_CHARS_PER_PROVIDER } from '../utils/constants.js';
+
+// Per-file limit is 1/6 of total budget so at least 6 files always get representation
+function getPerFileLimit(totalLimit: number): number {
+  return Math.floor(totalLimit / 6);
+}
 
 // Runs a shell command and returns the output as a string.
 // Returns empty string if the command fails instead of crashing.
@@ -60,8 +67,49 @@ function getProjectInfo(): { projectName: string; projectDescription: string } {
   }
 }
 
+// Splits a full diff into per-file chunks and truncates each one
+// so the AI gets a representative view of every changed file
+function truncateDiff(
+  diff: string,
+  totalLimit: number,
+): { diff: string; truncated: boolean } {
+  const perFileLimit = getPerFileLimit(totalLimit);
+
+  // Each file section in a diff starts with "diff --git"
+  const fileSections = diff.split(/(?=^diff --git)/m).filter(Boolean);
+
+  if (fileSections.length <= 1 && diff.length <= totalLimit) {
+    return { diff, truncated: false };
+  }
+
+  let totalChars = 0;
+  let truncated = false;
+  const parts: string[] = [];
+
+  for (const section of fileSections) {
+    const chunk =
+      section.length > perFileLimit
+        ? section.slice(0, perFileLimit) + '\n... (truncated)'
+        : section;
+
+    if (totalChars + chunk.length > totalLimit) {
+      truncated = true;
+      break;
+    }
+
+    parts.push(chunk);
+    totalChars += chunk.length;
+
+    if (section.length > perFileLimit) {
+      truncated = true;
+    }
+  }
+
+  return { diff: parts.join('\n'), truncated };
+}
+
 // Validates everything then returns all context the AI needs
-export function getGitContext(): GitContext {
+export function getGitContext(provider: Provider): GitContext {
   if (!isGitRepo()) {
     throw new Error('Not a git repository. Run this inside a git project.');
   }
@@ -70,7 +118,10 @@ export function getGitContext(): GitContext {
     throw new Error('No staged changes found. Run "git add <files>" first.');
   }
 
-  const diff = getStagedDiff();
+  const totalLimit = MAX_CHARS_PER_PROVIDER[provider];
+  const rawDiff = getStagedDiff();
+  const { diff, truncated: diffTruncated } = truncateDiff(rawDiff, totalLimit);
+
   const stat = getDiffStat();
   const recentCommits = getRecentCommits();
   const { projectName, projectDescription } = getProjectInfo();
@@ -81,5 +132,6 @@ export function getGitContext(): GitContext {
     recentCommits,
     projectName,
     projectDescription,
+    diffTruncated,
   };
 }

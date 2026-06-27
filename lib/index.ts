@@ -7,8 +7,14 @@ import { getGitContext } from './git.js';
 import { buildPrompt } from './prompt.js';
 import { generate } from './providers/index.js';
 import { displayMessage, promptAction } from './ui.js';
+import { showHelp } from './help.js';
 
 const command = process.argv[2];
+
+if (command === '--help' || command === '-h') {
+  showHelp();
+  process.exit(0);
+}
 
 // gcm init — re-run setup
 if (command === 'init') {
@@ -46,7 +52,25 @@ const config = getConfig();
 // Gather git context — fails early if not a repo or nothing staged
 let context;
 try {
-  context = getGitContext();
+  context = getGitContext(config.provider);
+  if (context.diffTruncated) {
+    console.log();
+    console.log(
+      chalk.yellow('⚠  Large diff detected — truncated for AI processing.'),
+    );
+    console.log(
+      chalk.dim('   Consider splitting this into smaller focused commits:'),
+    );
+    console.log(
+      chalk.dim('   1. Unstage everything    git restore --staged .'),
+    );
+    console.log(
+      chalk.dim('   2. Stage one concern     git add <specific files>'),
+    );
+    console.log(chalk.dim('   3. Commit it             gcm'));
+    console.log(chalk.dim('   4. Repeat for each concern'));
+    console.log();
+  }
 } catch (err: any) {
   console.log();
   console.log(chalk.red('✘ ') + err.message);

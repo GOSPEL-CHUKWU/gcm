@@ -57,10 +57,10 @@ gcm config   # view your current config
 | Provider | Free | API Key |
 |---|---|---|
 | Groq | ✅ Yes | Yes (get one free at console.groq.com) |
-| Gemini | ❌ Paid | Yes (get one free at aistudio.google.com) |
 | Ollama | ✅ Local | No key needed |
 | OpenAI | ❌ Paid | Yes |
 | Anthropic | ❌ Paid | Yes |
+| Gemini | ❌ Paid | Yes (get one free at aistudio.google.com) |
 
 ## Switching Providers
 

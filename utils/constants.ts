@@ -19,10 +19,10 @@ export const API_KEY_URLS: Partial<Record<Provider, string>> = {
 
 export const PROVIDERS: { label: string; value: Provider; free: boolean }[] = [
   { label: 'Groq', value: 'groq', free: true },
-  { label: 'Gemini', value: 'gemini', free: false },
   { label: 'Ollama (local, no key needed)', value: 'ollama', free: true },
   { label: 'OpenAI', value: 'openai', free: false },
   { label: 'Anthropic', value: 'anthropic', free: false },
+  { label: 'Gemini', value: 'gemini', free: false },
 ];
 
 export const ERROR_MESSAGES: Record<string, string> = {
@@ -31,4 +31,12 @@ export const ERROR_MESSAGES: Record<string, string> = {
   server_error: 'Provider servers are down. Try again later.',
   network_error: 'No internet connection. Check your network and try again.',
   unknown_error: 'Something went wrong. Try again.',
+};
+
+export const MAX_CHARS_PER_PROVIDER: Record<Provider, number> = {
+  groq: 60000,
+  openai: 60000,
+  anthropic: 80000,
+  gemini: 100000,
+  ollama: 6000,
 };
