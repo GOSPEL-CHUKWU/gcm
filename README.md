@@ -5,7 +5,7 @@ AI-powered git commit message generator. Reads your staged diff, understands you
 ## Install
 
 ```bash
-npm install -g generate-commit-message
+npm install -g git-gcm
 ```
 
 ## First Run

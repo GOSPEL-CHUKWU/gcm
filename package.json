@@ -1,5 +1,5 @@
 {
-  "name": "generate-commit-message",
+  "name": "git-gcm",
   "version": "1.0.0",
   "description": "AI-powered git commit message generator for the terminal",
   "type": "module",
