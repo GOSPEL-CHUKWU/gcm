@@ -39,9 +39,26 @@ function openInEditor(message: string): string {
 
 // Commits with the given message
 function commit(message: string): void {
-  const parts = message.split('\n\n');
-  const mFlags = parts.map(p => `-m "${p.replace(/"/g, '\\"')}"`).join(' ');
-  execSync(`git commit ${mFlags}`, { stdio: 'inherit' });
+  // Normalize: split on either \n\n or just \n between header and body
+  const parts = message.split('\n');
+  const subject = parts[0];
+  const body = parts
+    .slice(1)
+    .filter(line => line.trim() !== '')
+    .join('\n');
+
+  if (body) {
+    execSync(
+      `git commit -m "${subject.replace(/"/g, '\\"')}" -m "${body.replace(/"/g, '\\"')}"`,
+      {
+        stdio: 'inherit',
+      },
+    );
+  } else {
+    execSync(`git commit -m "${subject.replace(/"/g, '\\"')}"`, {
+      stdio: 'inherit',
+    });
+  }
 }
 
 // The main y/e/n prompt loop
