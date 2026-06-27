@@ -39,25 +39,17 @@ function openInEditor(message: string): string {
 
 // Commits with the given message
 function commit(message: string): void {
-  // Normalize: split on either \n\n or just \n between header and body
-  const parts = message.split('\n');
-  const subject = parts[0];
-  const body = parts
-    .slice(1)
-    .filter(line => line.trim() !== '')
-    .join('\n');
+  const tmpFile = path.join(os.tmpdir(), 'gcm-msg.txt');
 
-  if (body) {
-    execSync(
-      `git commit -m "${subject.replace(/"/g, '\\"')}" -m "${body.replace(/"/g, '\\"')}"`,
-      {
-        stdio: 'inherit',
-      },
-    );
-  } else {
-    execSync(`git commit -m "${subject.replace(/"/g, '\\"')}"`, {
-      stdio: 'inherit',
-    });
+  // Normalize \n to \n\n between subject and body
+  const normalized = message.replace(/^([^\n]+)\n([^\n])/, '$1\n\n$2');
+
+  fs.writeFileSync(tmpFile, normalized, 'utf-8');
+
+  try {
+    execSync(`git commit -F "${tmpFile}"`, { stdio: 'inherit' });
+  } finally {
+    fs.unlinkSync(tmpFile);
   }
 }
 
